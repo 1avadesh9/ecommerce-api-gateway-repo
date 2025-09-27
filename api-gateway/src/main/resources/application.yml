@@ -1,0 +1,33 @@
+# API Gateway URLs
+# http://127.0.0.1:5000/api/v1/products
+# http://127.0.0.1:5000/api/v1/orders
+# http://127.0.0.1:5000/api/v1/categories
+# http://127.0.0.1:5000/api/v1/payments
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product-service-route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/products/**, /api/v1/categories/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@ipKeyResolver}"
+                redis-rate-limiter.replenishRate: 2
+                redis-rate-limiter.burstCapacity: 2
+
+        - id: order-service-route
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/v1/orders/**
+
+        - id: payment-service-route
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/v1/payments/**
+
+server:
+  webflux:
+    # Add any WebFlux-specific configuration here if needed
