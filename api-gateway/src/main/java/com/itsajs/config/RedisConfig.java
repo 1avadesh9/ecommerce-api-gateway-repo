@@ -17,13 +17,13 @@ public class RedisConfig
 	    log.info("entered in RedisConfig.java ipKeyResolver()...");
 
 	    return serverWebExchange -> {
-	        String ip = serverWebExchange.getRequest()
+	        String ipAddress = serverWebExchange.getRequest()
 	                            .getRemoteAddress()
 	                            .getAddress()
 	                            .getHostAddress();
 	        
-	        log.info("ip from client request (browser/postman) : "+ip);
-	      return Mono.just(ip);
+	        log.info("ipAddress from client request (browser/postman) : "+ipAddress);
+	      return Mono.just(ipAddress);
 	    };
 	}
 
